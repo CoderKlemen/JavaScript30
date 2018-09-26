@@ -58,7 +58,36 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  window.addEventListener('keydown', (e) => {
+        const buttonPressed = e.keyCode;
+        console.log(buttonPressed);
+        const divs = document.getElementsByTagName('div');
+        for (let i = 1, x = divs.length; i<x; i++) {
+            if (divs[i].getAttribute('data-key') === buttonPressed.toString()) {
+                divs[i].setAttribute('class', 'playing key');
+          };
+        };
+        const audios = document.getElementsByTagName('audio');
+        console.log(audios);
+        for (let i = 0, x = audios.length; i<x; i++) {
+            if (audios[i].getAttribute('data-key') === buttonPressed.toString()) {
+                // we can improve this -> the sound always starts at the beggining
+                // audios[i].currentTime = 0;
+                audios[i].play();
+                
+          };
+        };
+  } );
 
+  window.addEventListener('keyup', (e) => {
+        const buttonPressed = e.keyCode;
+        const divs = document.getElementsByTagName('div');
+        for (let i = 1, x = divs.length; i<x; i++) {
+            if (divs[i].getAttribute('data-key') === buttonPressed.toString()) {
+                divs[i].setAttribute('class', 'key');
+          };
+        };
+  } ); 
 
 </script>
 
