@@ -53,7 +53,8 @@
       position: relative;
       width: 100%;
       height: 100%;
-      transform: translateY(-3px); /* account for the height of the clock hands */
+      /* account for the height of the clock hands */
+      transform: translateY(-3px); 
     }
 
     .hand {
@@ -88,24 +89,39 @@
   </style>
 
   <script>
-    let time = new Date();
-    let hours = time.getHours() * 15 + 60;
-    let minutes = time.getMinutes() * 6 + 90;
-    let seconds = time.getSeconds() * 6 + 90;
-    console.log(hours);
-    console.log(minutes);
-    console.log(seconds);
 
-    const H = document.querySelector('.hour-hand');
-    const M = document.querySelector('.min-hand');
-    const S = document.querySelector('.second-hand');
+    let interval;
 
-    /*H.attribute('transform', `rotate(${hours}deg)`);
-    M.attribute('transform', `rotate(${minutes}deg)`);
-    S.attribute('transform', `rotate(${seconds}deg)`);*/
-    H.style.transform = `rotate(${hours}deg)`;
-    M.style.transform = `rotate(${minutes}deg)`;
-    S.style.transform = `rotate(${seconds}deg)`;
+    const setTime = () => {
+      const time = new Date(); 
+      // Time is multiplied with 6, because 360 degrees of clock face 
+      // divided with 60 minutes (seconds) is 6. We add 90 deg, because
+      // normal position is at 9:00am, but day starts at 0:00  
+      const minutes = time.getMinutes() * 6 + 90 + (time.getSeconds()/60*6);
+      const seconds = time.getSeconds() * 6 + 90;
+
+      // Time is multiplied with 30, because 360 degrees of clock face 
+      // divided with 12 hours is 30. We add 90 deg, because
+      // normal position is at 9:00am, but day starts at 0:00
+      // At the end we add the amount of minutes, that passed in the hour 
+      const hours = time.getHours() * 30 + 90 + (time.getMinutes()/60*30);
+
+      // get elements
+      const H = document.querySelector('.hour-hand');
+      const M = document.querySelector('.min-hand');
+      const S = document.querySelector('.second-hand');
+
+      // put elements in the right position
+      H.style.transform = `rotate(${hours}deg)`;
+      M.style.transform = `rotate(${minutes}deg)`;
+      S.style.transform = `rotate(${seconds}deg)`;
+    };
+
+    const playTime = () => {
+      interval = setInterval(setTime, 1000);
+    }
+    
+    window.onload = playTime;
 
   </script>
 </body>
