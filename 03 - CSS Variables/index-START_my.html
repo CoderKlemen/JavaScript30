@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scoped CSS Variables and JS</title>
+</head>
+<body>
+  <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
+
+  <div class="controls">
+    <label for="spacing">Spacing:</label>
+    <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
+
+    <label for="blur">Blur:</label>
+    <input id="blur" type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
+
+    <label for="base">Base Color</label>
+    <input id="base" type="color" name="base" value="#ccff00">
+  </div>
+
+  <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
+
+  <style>
+
+    :root {
+      --blur-value: 5px;
+      --spacing-value: 20px;
+      --color-value: #ccff00;
+    }
+
+    /*
+      misc styles, nothing to do with CSS variables
+    */
+
+    body {
+      text-align: center;
+      background: #193549;
+      color: white;
+      font-family: 'helvetica neue', sans-serif;
+      font-weight: 100;
+      font-size: 50px;
+    }
+
+    .controls {
+      margin-bottom: 50px;
+    }
+
+    input {
+      width: 100px;
+    }
+
+    .hl {
+      color: var(--color-value);
+    }
+
+    img {
+      background-color: var(--color-value);
+      padding: var(--spacing-value);
+      filter: blur( var(--blur-value) );
+    }
+
+
+  </style>
+
+  <script>
+    const color = document.querySelector('#base');
+    const blur = document.querySelector('#blur');
+    const spacing = document.querySelector('#spacing');
+
+    const handleChange = (e) => {
+      if (e.target.name === 'base') {
+        document.documentElement.style.setProperty('--color-value', e.target.value);
+      }
+      else if (e.target.name === 'blur') {
+        document.documentElement.style.setProperty('--blur-value', e.target.value + 'px');
+      }
+      else {
+        document.documentElement.style.setProperty('--spacing-value', e.target.value + 'px');;
+      }
+    }
+
+    color.addEventListener('change', handleChange);
+    color.addEventListener('mousemove', handleChange);
+
+    blur.addEventListener('change', handleChange);
+    blur.addEventListener('mousemove', handleChange);
+
+    spacing.addEventListener('change', handleChange);
+    spacing.addEventListener('mousemove', handleChange);
+
+  </script>
+
+</body>
+</html>
