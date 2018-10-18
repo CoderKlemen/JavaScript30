@@ -31,28 +31,72 @@
 
     // Array.prototype.filter()
     // 1. Filter the list of inventors for those who were born in the 1500's
+    const filterInventors = inventors.filter( i => i.year > 1499 && i.year < 1600 );
+    console.log(filterInventors);
 
     // Array.prototype.map()
     // 2. Give us an array of the inventors' first and last names
+    const inventorsFirstLast = inventors.map( (i) => { return `${i.first} ${i.last}` });
+    console.log(inventorsFirstLast);
 
     // Array.prototype.sort()
     // 3. Sort the inventors by birthdate, oldest to youngest
+    const inventorsSort = inventors.sort( (a , b) =>  a.year - b.year);
+    console.log(inventorsSort);
 
     // Array.prototype.reduce()
     // 4. How many years did all the inventors live?
+    const inventorsAge = inventors.map(i => i.passed - i.year).reduce( (sum, i) => sum + i );
+    console.log(inventorsAge);
 
     // 5. Sort the inventors by years lived
+    const inventorsLived = inventors.sort( (a,b) => (a.passed - a.year) - (b.passed - b.year));
+    console.log(inventorsLived)
 
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
+    const request = new XMLHttpRequest();
+
+    request.addEventListener("load", e => {
+        console.log(e);
+    }, false);
+
+    request.open('GET', 'https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris', true);
+    //request.setRequestHeader('Access-Control-Allow-Origin', 'http://example.com');
+    request.setRequestHeader('Origin', 'http://example.com');
+    request.send();
+    request.onload = () => {
+      console.log( request.response);
+      //json = JSON.parse(request.responseText);
+      // DATA.kickstarter = JSON.parse(req.responseText);
+    };
 
 
     // 7. sort Exercise
     // Sort the people alphabetically by last name
+    const peopleSort = people.sort( (a , b) => {
+      const aLast = a.split(' ')[1];
+      const bLast = b.split(' ')[1];
+
+      if (a < b) {
+        return -1;
+      }
+      else if ( a > b) {
+        return 1;
+      }
+      else {
+        return 0;
+      }
+      
+    });
+    console.log(peopleSort);
 
     // 8. Reduce Exercise
     // Sum up the instances of each of these
     const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
+    //const vehiclesNumber = data.map( i => data.filter( j => i===j ))//.map( x => data.filter( y => x===y).length)//.reduce( (sum, i) => sum + i);
+  const vehiclesNumber = data.filter( (i, x) => data.indexOf(i)===x).map( i => data.filter(j => i===j).length)//.reduce( (sum, i) => sum + i);
+    console.log(vehiclesNumber);
 
   </script>
 </body>
