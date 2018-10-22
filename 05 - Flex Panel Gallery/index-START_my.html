@@ -1,3 +1,6 @@
+<!-- Ostal pri 6:45 v videu -->
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,7 +28,9 @@
 
     .panels {
       min-height: 100vh;
+      
       overflow: hidden;
+      display: flex;
     }
 
     .panel {
@@ -43,6 +48,20 @@
       font-size: 20px;
       background-size: cover;
       background-position: center;
+      
+      /* each of the children (panel is child of panels) will evenly distribute 
+      the width of the screen amongst themselves. 'panels' takes up the whole screen! */
+      flex: 1;
+
+      /* we align the children */ 
+      justify-content: center;
+      align-items: center;
+
+      /* for the alignment to work, we need to make 'panel' a flex container as well */
+      display: flex;
+
+      /* we change direction so the items in the flex container are stacked vertically */
+      flex-direction: column;
     }
 
     .panel1 { background-image:url(https://source.unsplash.com/gYl-UtwNg_I/1500x1500); }
@@ -51,11 +70,39 @@
     .panel4 { background-image:url(https://source.unsplash.com/ITjiVXcwVng/1500x1500); }
     .panel5 { background-image:url(https://source.unsplash.com/3MNzGlQM7qs/1500x1500); }
 
-    /* Flex Children */
+    /* Flex Items */
     .panel > * {
       margin: 0;
       width: 100%;
       transition: transform 0.5s;
+
+      /* we add a red border, so we can see what we are doing 
+      border: solid 1px red;
+      */
+
+
+      /* we make this items in flex container take up 1/3 of the place */
+      flex: 1 0 auto;
+
+      /* we make this item a flex container too, so we can align content in it */ 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* we add translate to the first and last child of panel's children (first and last <p>) -> we then 
+    add class 'open-active' and it removes the translate */
+    .panel > *:first-child {
+      transform: translateY(-100%);
+    }
+    .panel.open-active > *:first-child {
+      transform: translateY(0);
+    }
+    .panel > *:last-child {
+      transform: translateY( 100%);
+    }
+    .panel.open-active > *:last-child {
+      transform: translateY(0);
     }
 
     .panel p {
@@ -71,6 +118,11 @@
 
     .panel.open {
       font-size: 40px;
+
+      /* we add flex here, so that when class 'open' is added, the 
+      panel takes more space. If more of them get flex: 5, then they
+       redistribute the width of the screen amongst themselves again */
+      flex: 5;
     }
 
   </style>
@@ -105,6 +157,27 @@
   </div>
 
   <script>
+    // get all items with class panel
+    const panels = document.querySelectorAll('.panel');
+
+    function toggleOpen() {
+      this.classList.toggle('open');
+    }
+
+    /* 
+     * if event inludes 'flex', the class is toggled. 
+     * This is necessary, because safari treats flex grow differently
+     * and we want to cover all the browsers.
+    */
+    function toggleActive(e) {
+      if(e.propertyName.includes('flex')) {
+        this.classList.toggle('open-active');
+      }
+    }
+
+    // add eventListeners
+    panels.forEach( panel => panel.addEventListener('click', toggleOpen));
+    panels.forEach( panel => panel.addEventListener('transitionend', toggleActive));
 
   </script>
 
