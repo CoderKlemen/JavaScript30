@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+<script type="text/javascript">
+
+'use strict';
+
+const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+let citiesStates = [];
+
+const citiesRequest = () => {
+    const req = new XMLHttpRequest();
+    req.open(
+        'GET',
+        endpoint,
+        true
+    );
+    req.send();
+    req.onload = () => {
+        const DATA = JSON.parse(req.responseText);
+        console.log(DATA);
+        DATA.map( m => citiesStates.push(`${m.city}, ${m.state}  ${m.population}`));
+    }   
+};
+citiesRequest();
+
+const search = document.querySelector('.search');
+const suggestions = document.querySelector('.suggestions');
+
+const suggestPlace = (e) => {
+    const typed = e.target.value.toLowerCase();
+
+    const li = document.querySelectorAll('li');
+    for (let l of li) {
+        l.remove();
+    }
+
+    citiesStates.forEach( c => {
+        if (c.toLowerCase().includes(typed)) {
+            const element = document.createElement('li');
+            element.innerHTML = c;
+            suggestions.appendChild(element);
+        }   
+    })
+}
+
+search.addEventListener('keyup', suggestPlace);
+
+
+
+</script>
+  </body>
+</html>
