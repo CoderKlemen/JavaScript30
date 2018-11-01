@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+</head>
+<body>
+<canvas id="draw" height='800' width='1200'>fallback</canvas>
+<script>
+    const canvas = document.getElementById('draw');
+    const context = canvas.getContext ? true : false;
+    const ctx = context ? canvas.getContext('2d') : '';
+    
+    // mouse button pressed flag
+    let pressed = false;
+
+    // this flags tell us if we should increase or decrease the values for circle and colors   
+    let circleDirection = true;
+    let rDirection = true;
+    let gDirection = true;
+    let bDirection = true;
+    // start values for rgb() and circle
+    let diameter = 25;
+    let r = 0;
+    let g = 125;
+    let b = 255;
+
+    
+
+    const handleMove = (e) => {
+        circleDirection = diameter < 50 && circleDirection ? true : false;
+        rDirection = r <= 255 && rDirection ? true : false;
+        gDirection = g <= 255 && gDirection ? true : false;
+        bDirection = b <= 255 && bDirection ? true : false;
+        diameter = circleDirection ? diameter + 1  : diameter - 1;
+        r = rDirection ? r + 5 : r -5;
+        g = gDirection ? g + 5 : g -5;
+        b = bDirection ? b + 5 : b -5;
+        
+        if (pressed) {
+            const circle = new Path2D();        
+            // circle.moveTo(e.clientX, e.clientY);
+            circle.lineTo(e.clientX, e.clientY);
+            circle.arc(e.clientX - diameter, e.clientY, diameter, 0, 2*Math.PI);
+            ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+            ctx.fill(circle);
+        }
+        circleDirection = diameter > 1 && !circleDirection ? false : true;
+        rDirection = r > 1 && !rDirection ? false : true;
+        gDirection = g > 1 && !gDirection ? false : true;
+        bDirection = b > 1 && !bDirection ? false : true;
+
+    }
+
+    const handleStart = (e) => {
+        e.preventDefault();
+        if (e.button === 0) {
+            pressed = true;
+        }
+    }
+
+    const handleEnd = (e) => {
+        e.preventDefault();
+        if (e.button === 0) {
+            pressed = false;
+        }
+    }
+
+    canvas.addEventListener('mousedown', handleStart);
+    canvas.addEventListener('mousemove', handleMove);
+    canvas.addEventListener('mouseup', handleEnd);
+
+
+</script>
+
+<style>
+  html, body {
+    margin: 0;
+  }
+  #draw {
+      border: solid 1px black;
+  }
+</style>
+
+</body>
+</html>
