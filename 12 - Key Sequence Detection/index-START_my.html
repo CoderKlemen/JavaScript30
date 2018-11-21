@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Key Detection</title>
+  <script type="text/javascript" src="http://www.cornify.com/js/cornify.js"></script>
+</head>
+<body>
+<script>
+  // konami code: up up down down left right left right b a enter
+  const a = {
+    sequencePressed: [],
+    konami: 'arrowup,arrowup,arrowdown,arrowdown,arrowleft,arrowright,arrowleft,arrowright,b,a,enter',
+    lengthOfKonami: 11,
+
+    addListeners: () => {
+      window.addEventListener('keypress', a.handleKeypress);
+    },
+
+    handleKeypress: (e) => {
+      console.log(e.key.toLowerCase());
+      a.sequencePressed.push(e.key.toLowerCase());
+      a.sequencePressed.splice(-a.lengthOfKonami -1 , a.sequencePressed.length - a.lengthOfKonami);
+      //const lastEleven = a.sequencePressed.slice(-11).join(',');
+      const lastEleven = a.sequencePressed.join(',');
+      if(lastEleven.includes(a.konami)) {
+        console.log('Ding Ding!!');
+        cornify_add();
+      };
+      console.log(lastEleven);
+    },
+
+    start: () => {
+      a.addListeners();
+    }
+
+  };
+
+  a.start();
+
+</script>
+</body>
+</html>
